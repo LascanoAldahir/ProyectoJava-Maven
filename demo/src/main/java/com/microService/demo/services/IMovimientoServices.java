@@ -1,10 +1,12 @@
 package com.microService.demo.services;
 
+import com.microService.demo.dto.EstadoCuentaDTO;
 import com.microService.demo.dto.MovimientoDTO;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface IMovimientoServices {
+
     // Obtiene todos los movimientos
     List<MovimientoDTO> findAll();
 
@@ -26,4 +28,7 @@ public interface IMovimientoServices {
 
     // Elimina un movimiento
     void delete(Long id);
+
+    // Nuevo metodo para generar reporte de estado de cuenta
+    EstadoCuentaDTO generarReporteEstadoCuenta(String clienteId, LocalDate fechaInicio, LocalDate fechaFin);
 }
