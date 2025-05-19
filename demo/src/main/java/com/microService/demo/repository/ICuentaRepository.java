@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ICuentaRepository extends JpaRepository<Cuenta, Long> {
-    // Encuentra todas las cuentas asociadas a un cliente específico
+    // Encuentra todas las cuentas asociadas a un cliente específico por ID
     List<Cuenta> findByClienteId(Long clienteId);
 }

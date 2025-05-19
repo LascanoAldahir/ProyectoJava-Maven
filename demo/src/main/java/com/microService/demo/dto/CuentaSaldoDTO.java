@@ -7,13 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class CuentaDTO {
+public class CuentaSaldoDTO {
     private Long numeroCuenta;
     private String tipoCuenta;
     private double saldoInicial;
+    private double saldoFinal;
     private boolean estado;
-    private String clienteId; // Solo mantenemos el ID del cliente, no el objeto completo
-    // Este DTO simplifica la transferencia de datos de cuentas
-    // evitando referencias circulares con clientes
 }

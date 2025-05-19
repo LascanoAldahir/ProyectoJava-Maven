@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/movimientos")
@@ -49,23 +50,50 @@ public class MovimientoController {
     }
 
     @PostMapping
-    public ResponseEntity<MovimientoDTO> createMovimiento(@RequestBody MovimientoDTO movimientoDTO) {
-        MovimientoDTO newMovimiento = movimientoService.save(movimientoDTO);
-        return new ResponseEntity<>(newMovimiento, HttpStatus.CREATED);
+    public ResponseEntity<?> createMovimiento(@RequestBody MovimientoDTO movimientoDTO) {
+        try {
+            MovimientoDTO newMovimiento = movimientoService.save(movimientoDTO);
+            return new ResponseEntity<>(newMovimiento, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            // Si la excepción es por saldo insuficiente, devolver un mensaje específico
+            if (e.getMessage().equals("Saldo no disponible")) {
+                return new ResponseEntity<>(Map.of("error", "Saldo no disponible", "mensaje", e.getMessage()),
+                        HttpStatus.BAD_REQUEST);
+            }
+            // Para otros errores
+            return new ResponseEntity<>(Map.of("error", "Error al crear movimiento", "mensaje", e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MovimientoDTO> updateMovimiento(@PathVariable Long id, @RequestBody MovimientoDTO movimientoDTO) {
-        MovimientoDTO updatedMovimiento = movimientoService.update(id, movimientoDTO);
-        if (updatedMovimiento != null) {
-            return new ResponseEntity<>(updatedMovimiento, HttpStatus.OK);
+    public ResponseEntity<?> updateMovimiento(@PathVariable Long id, @RequestBody MovimientoDTO movimientoDTO) {
+        try {
+            MovimientoDTO updatedMovimiento = movimientoService.update(id, movimientoDTO);
+            if (updatedMovimiento != null) {
+                return new ResponseEntity<>(updatedMovimiento, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e) {
+            // Si la excepción es por saldo insuficiente, devolver un mensaje específico
+            if (e.getMessage().equals("Saldo no disponible")) {
+                return new ResponseEntity<>(Map.of("error", "Saldo no disponible", "mensaje", e.getMessage()),
+                        HttpStatus.BAD_REQUEST);
+            }
+            // Para otros errores
+            return new ResponseEntity<>(Map.of("error", "Error al actualizar movimiento", "mensaje", e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMovimiento(@PathVariable Long id) {
-        movimientoService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> deleteMovimiento(@PathVariable Long id) {
+        try {
+            movimientoService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(Map.of("error", "Error al eliminar movimiento", "mensaje", e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
