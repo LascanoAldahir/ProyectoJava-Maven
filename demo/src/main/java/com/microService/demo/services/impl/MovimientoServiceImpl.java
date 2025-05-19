@@ -6,6 +6,7 @@ import com.microService.demo.model.Movimiento;
 import com.microService.demo.repository.ICuentaRepository;
 import com.microService.demo.repository.IMovimientoRepository;
 import com.microService.demo.services.IMovimientoServices;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class MovimientoServiceImpl implements IMovimientoServices {
     @Autowired
     private IMovimientoRepository movimientoRepository;
-
+    //Inyectamos el repositorio de movimientos para operaciones crud
     @Autowired
     private ICuentaRepository cuentaRepository;
 
@@ -50,6 +51,7 @@ public class MovimientoServiceImpl implements IMovimientoServices {
     }
 
     @Override
+    @Transactional
     public MovimientoDTO save(MovimientoDTO movimientoDTO) {
         Movimiento movimiento = convertToEntity(movimientoDTO);
 
@@ -57,7 +59,8 @@ public class MovimientoServiceImpl implements IMovimientoServices {
         if (movimiento.getFecha() == null) {
             movimiento.setFecha(LocalDate.now());
         }
-
+        //validamos que el tipo de movimiento sea coherente con el valor
+        validarTipoMovimiento(movimiento);
         // Obtener la cuenta y actualizar su saldo
         if (movimiento.getCuenta() != null) {
             Cuenta cuenta = cuentaRepository.findById(movimiento.getCuenta().getNumeroCuenta())
@@ -74,10 +77,27 @@ public class MovimientoServiceImpl implements IMovimientoServices {
 
         // Guardamos el movimiento
         Movimiento savedMovimiento = movimientoRepository.save(movimiento);
+        //Convertimos la entidad guardada de vuelta a DTO y la devolvemos
         return convertToDTO(savedMovimiento);
     }
 
+    //Valida que el tipo de movimiento coincida con el valor
+    //F2
+    private void validarTipoMovimiento(Movimiento movimiento) {
+        // Si el tipo es "Depósito", el valor debe ser positivo
+        if ("Depósito".equalsIgnoreCase(movimiento.getTipoMovimiento()) && movimiento.getValor() <= 0) {
+            throw new RuntimeException("Un depósito debe tener un valor positivo");
+        }
+
+        // Si el tipo es "Retiro", el valor debe ser negativo
+        if ("Retiro".equalsIgnoreCase(movimiento.getTipoMovimiento()) && movimiento.getValor() >= 0) {
+            // Convertimos automáticamente el valor a negativo para asegurar consistencia
+            movimiento.setValor(-Math.abs(movimiento.getValor()));
+        }
+    }
+
     @Override
+    @Transactional
     public MovimientoDTO update(Long id, MovimientoDTO movimientoDTO) {
         if (movimientoRepository.existsById(id)) {
             Movimiento movimiento = convertToEntity(movimientoDTO);
@@ -89,6 +109,7 @@ public class MovimientoServiceImpl implements IMovimientoServices {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         movimientoRepository.deleteById(id);
     }
