@@ -3,18 +3,18 @@ Show Image
 Este proyecto implementa un sistema bancario utilizando microservicios con Spring Boot. Proporciona funcionalidades para la gestión de clientes, cuentas, movimientos y reportes financieros.
 ## 📋 Características Implementadas
 
-F1: Operaciones CRUD completas para Clientes, Cuentas y Movimientos
-F2: Registro de transacciones financieras con actualización automática de saldos
-F3: Validación de saldo disponible con mensajes de error apropiados
+F1: Operaciones CRUD completas para Clientes, Cuentas y Movimientos <br>
+F2: Registro de transacciones financieras con actualización automática de saldos <br>
+F3: Validación de saldo disponible con mensajes de error apropiados <br>
 
 ## 🛠️ Tecnologías Utilizadas
 
-Java 21
-Spring Boot 3.4.5
-Spring Data JPA
-PostgreSQL
-Lombok
-Maven
+Java 21 <br>
+Spring Boot 3.4.5 <br>
+Spring Data JPA <br>
+PostgreSQL <br>
+Lombok <br>
+Maven <br>
 
 ## 🚀 Guía de Pruebas
 Las siguientes secciones detallan cómo probar cada funcionalidad del sistema utilizando Postman.
@@ -23,12 +23,12 @@ Las siguientes secciones detallan cómo probar cada funcionalidad del sistema ut
 ### Crear Cliente (POST)
 
 URL: 
-
+<br>
+Método: POST <br>
+Headers: Content-Type: application/json <br>
 ```
 http://localhost:8080/clientes
 ```
-Método: POST
-Headers: Content-Type: application/json
 Body:
 ```
 json{
@@ -44,50 +44,55 @@ json{
 }
 ```
 Show Image
-
+<br>
 ## Obtener Todos los Clientes (GET)
+<br>
 
 URL: 
+<br>
+Método: GET
 ```
 http://localhost:8080/clientes
 ```
-Método: GET
 
+<br>
 ## Obtener Cliente por ID (GET)
-
+<br>
+Método: GET
 URL: 
 ```
 http://localhost:8080/clientes/{id}
 ```
-Método: GET
+
 
 ## Actualizar Cliente (PUT)
-
+Método: PUT <br>
+Headers: Content-Type: application/json <br>
 URL: 
 ```
 http://localhost:8080/clientes/{id}
 ```
-Método: PUT
-Headers: Content-Type: application/json
+
 Body: (mismo formato que en la creación)
 
 ## Eliminar Cliente (DELETE)
-
+Método: DELETE <br>
 URL: 
 ```
 http://localhost:8080/clientes/{id}
 ```
-Método: DELETE
+
 
 ##📌 Cuenta
 ### Crear Cuenta (POST)
-
+<br>
+Método: POST <br>
+Headers: Content-Type: application/json <br>
 URL: 
 ```
 http://localhost:8080/cuentas
 ```
-Método: POST
-Headers: Content-Type: application/json
+
 Body:
 ```
 json{
@@ -99,52 +104,56 @@ json{
 }
 ```
 Show Image
-### Obtener Todas las Cuentas (GET)
 
+
+### Obtener Todas las Cuentas (GET)
+Método: GET <br>
 URL: 
 ```
 http://localhost:8080/cuentas
 ```
-Método: GET
+
 
 ### Obtener Cuenta por Número (GET)
-
+Método: GET <br>
 URL: 
 ```
 http://localhost:8080/cuentas/{numeroCuenta}
 ```
-Método: GET
+
 Show Image
 
 ### Actualizar Cuenta (PUT)
-
+Método: PUT <br>
+Headers: Content-Type: application/json <br>
 URL: 
 ```
 http://localhost:8080/cuentas/{numeroCuenta}
 ```
-Método: PUT
-Headers: Content-Type: application/json
+
 Body: (mismo formato que en la creación)
 
 ## Eliminar Cuenta (DELETE)
-
+Método: DELETE <br>
 URL: 
 ```
 http://localhost:8080/cuentas/{numeroCuenta}
 ```
 
-Método: DELETE
+
 
 ## F2 & F3: Gestión de Movimientos y Validación de Saldo
 ###📝 Flujo de prueba completo
-## 1️⃣ Crear un depósito (valor positivo)
+<br>
 
+## 1️⃣ Crear un depósito (valor positivo)
+Método: POST <br>
+Headers: Content-Type: application/json <br>
 URL: 
 ```
 http://localhost:8080/movimientos
 ```
-Método: POST
-Headers: Content-Type: application/json
+
 Body:
 ```
 json{
@@ -161,15 +170,16 @@ json{
 Estado: 201 Created
 El saldo de la cuenta se incrementa a 2500
 Show Image
-
+Método: POST<br>
+<br>
 ## 2️⃣ Crear un retiro (valor negativo)
-
+Método: POST <br>
+Headers: Content-Type: application/json <br>
 URL: 
 ```
 http://localhost:8080/movimientos
 ```
-Método: POST
-Headers: Content-Type: application/json
+
 Body:
 ```
 json{
@@ -187,12 +197,12 @@ El saldo de la cuenta se reduce a 2200
 Show Image
 
 ## 3️⃣ Verificar saldo actualizado
-
+Método: GET
 URL: 
 ```
 http://localhost:8080/cuentas/478758
 ```
-Método: GET
+
 
 ### Resultado esperado:
 
@@ -201,12 +211,13 @@ Respuesta que incluye "saldoInicial": 2200
 Show Image
 
 ## 4️⃣ Validar protección de saldo insuficiente (F3)
-
+Método: POST <br>
+Headers: Content-Type: application/json <br>
 URL: 
 ```
 http://localhost:8080/movimientos
 ```
-Método: POST
+
 Headers: Content-Type: application/json
 Body:
 ```
@@ -226,38 +237,39 @@ Mensaje de error: "Saldo no disponible"
 Show Image
 
 ## 5️⃣ Consultar historial de movimientos
-
+Método: GET
 URL: 
 ```
 http://localhost:8080/movimientos/cuenta/478758
 ```
-Método: GET
+
 
 ### Resultado esperado:
 
-Estado: 200 OK
-Lista de todos los movimientos realizados en la cuenta
+Estado: 200 OK <br>
+Lista de todos los movimientos realizados en la cuenta <br>
 Show Image
 
 ## 6️⃣ Modificar un movimiento existente
 
 Primero, obtén el ID del movimiento:
-
+<br>
+Método: GET
 URL: 
 ```
 http://localhost:8080/movimientos
 ```
-Método: GET
 
 
-Luego actualiza:
 
+Luego actualiza: <br>
+Método: PUT <br>
+Headers: Content-Type: application/json <br>
 URL: 
 ```
 http://localhost:8080/movimientos/{id}
 ```
-Método: PUT
-Headers: Content-Type: application/json
+
 Body:
 
 
@@ -276,27 +288,29 @@ Estado: 200 OK
 El saldo de la cuenta se ajusta automáticamente
 
 ## 7️⃣ Eliminar un movimiento
-
+Método: DELETE
 URL: 
 ```
 http://localhost:8080/movimientos/{id}
 ```
-Método: DELETE
+
 
 ### Resultado esperado:
 
-Estado: 204 No Content
-El saldo de la cuenta se revierte automáticamente
+Estado: 204 No Content <br>
+El saldo de la cuenta se revierte automáticamente <br>
 Show Image
 
 ## 📊 Estado de Cuenta (F4)
 Aunque esta funcionalidad no está completamente implementada en esta fase, podemos preparar la estructura para futuras versiones. Se puede probar el endpoint parcialmente con la siguiente solicitud:
-
+<br>
+Método: GET
+<br>
 URL: 
 ```
 http://localhost:8080/reportes?clienteId=jose.lema&fechaInicio=2023-05-01&fechaFin=2023-05-30
 ```
-Método: GET
+
 
 El resultado esperado sería un JSON con la estructura de un estado de cuenta, pero posiblemente con datos limitados en esta fase.
 ## 🗂️ Estructura del Proyecto
@@ -355,16 +369,17 @@ src/
 
 Para que las pruebas funcionen correctamente, asegúrate de crear primero un cliente y una cuenta.
 Todos los movimientos negativos (retiros) están validados para prevenir sobregiros.
+<br>
 La base de datos se reinicia en cada ejecución (modo create-drop). Para persistencia, cambia esta configuración en application.properties.
 
 ## 🚀 Próximos Pasos
 
-Implementación completa de F4: Reporte de estado de cuenta
-Pruebas unitarias adicionales
-Configuración para Docker
-Documentación con Swagger/OpenAPI
+Implementación completa de F4: Reporte de estado de cuenta <br>
+Pruebas unitarias adicionales <br>
+Configuración para Docker <br>
+Documentación con Swagger/OpenAPI <br>
 
-📄 Licencia
+📄 Licencia <br>
 Este proyecto está licenciado bajo los términos de la licencia MIT.
-
+<br>
 ⭐️ Desarrollado como parte de la prueba técnica de Arquitectura Microservicio (2023) ⭐️
