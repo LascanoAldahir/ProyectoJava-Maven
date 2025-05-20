@@ -19,13 +19,12 @@ Maven <br>
 ## 🚀 Guía de Pruebas
 Las siguientes secciones detallan cómo probar cada funcionalidad del sistema utilizando Postman.
 ## F1: Operaciones CRUD
+
 ## 📌 Cliente
 ### Crear Cliente (POST)
-
-URL: 
-<br>
 Método: POST <br>
 Headers: Content-Type: application/json <br>
+URL:
 ```
 http://localhost:8080/clientes
 ```
@@ -45,12 +44,13 @@ json{
 ```
 Show Image
 <br>
+
 ## Obtener Todos los Clientes (GET)
 <br>
 
-URL: 
 <br>
 Método: GET
+URL: 
 ```
 http://localhost:8080/clientes
 ```
@@ -83,7 +83,7 @@ http://localhost:8080/clientes/{id}
 ```
 
 
-##📌 Cuenta
+## 📌 Cuenta
 ### Crear Cuenta (POST)
 <br>
 Método: POST <br>
