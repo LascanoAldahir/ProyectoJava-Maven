@@ -180,15 +180,9 @@ json{
 ```
 
 ![image](https://github.com/user-attachments/assets/0a875b48-af2a-4daf-9627-d15c75c25c80)
-
-
-### Resultado esperado:
-
-Estado: 201 Created
-El saldo de la cuenta se incrementa a 2500
-Show Image
-Método: POST<br>
 <br>
+
+
 ## 2️⃣ Crear un retiro (valor negativo)
 Método: POST <br>
 Headers: Content-Type: application/json <br>
@@ -213,6 +207,7 @@ Estado: 201 Created
 El saldo de la cuenta se reduce a 2200
 Show Image
 
+
 ## 3️⃣ Verificar saldo actualizado
 Método: GET
 URL: 
@@ -224,8 +219,9 @@ http://localhost:8080/cuentas/478758
 ### Resultado esperado:
 
 Estado: 200 OK
-Respuesta que incluye "saldoInicial": 2200
-Show Image
+Respuesta que incluye saldo inicial
+![image](https://github.com/user-attachments/assets/6563e548-69c4-4fbf-816b-b6e9cea22846)
+
 
 ## 4️⃣ Validar protección de saldo insuficiente (F3)
 Método: POST <br>
@@ -235,10 +231,9 @@ URL:
 http://localhost:8080/movimientos
 ```
 
-Headers: Content-Type: application/json
 Body:
 ```
-json{
+{
   "fecha": "2023-05-19",
   "tipoMovimiento": "Retiro",
   "valor": -3000,
@@ -251,7 +246,9 @@ json{
 
 Estado: 400 Bad Request
 Mensaje de error: "Saldo no disponible"
-Show Image
+
+![image](https://github.com/user-attachments/assets/a18555b1-fced-4d78-aa88-f7f1e63e7ea9)
+
 
 ## 5️⃣ Consultar historial de movimientos
 Método: GET
@@ -260,15 +257,15 @@ URL:
 http://localhost:8080/movimientos/cuenta/478758
 ```
 
-
 ### Resultado esperado:
 
 Estado: 200 OK <br>
 Lista de todos los movimientos realizados en la cuenta <br>
-Show Image
+
+![image](https://github.com/user-attachments/assets/d81f1def-5f5b-4a1f-aec7-3eac0bec2a11)
+
 
 ## 6️⃣ Modificar un movimiento existente
-
 Primero, obtén el ID del movimiento:
 <br>
 Método: GET
@@ -304,6 +301,10 @@ json{
 Estado: 200 OK
 El saldo de la cuenta se ajusta automáticamente
 
+![image](https://github.com/user-attachments/assets/0bfe9df2-7949-4ebb-a613-017feb406df5)
+
+
+
 ## 7️⃣ Eliminar un movimiento
 Método: DELETE
 URL: 
@@ -316,7 +317,8 @@ http://localhost:8080/movimientos/{id}
 
 Estado: 204 No Content <br>
 El saldo de la cuenta se revierte automáticamente <br>
-Show Image
+![image](https://github.com/user-attachments/assets/4b38acd7-5cfb-4d06-81b7-02dbb053fd51)
+
 
 ## 📊 Estado de Cuenta (F4)
 Aunque esta funcionalidad no está completamente implementada en esta fase, podemos preparar la estructura para futuras versiones. Se puede probar el endpoint parcialmente con la siguiente solicitud:
