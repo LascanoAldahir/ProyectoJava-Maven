@@ -42,27 +42,29 @@ json{
   "estado": true
 }
 ```
-Show Image
+![image](https://github.com/user-attachments/assets/51a29a68-9023-4377-a161-c9a3dd94b2a8)
 <br>
+![image](https://github.com/user-attachments/assets/04381132-4f38-4631-a9da-bf98d0ff7b61)
+
+<br>
+
 
 ## Obtener Todos los Clientes (GET)
-<br>
-
-<br>
 Método: GET
 URL: 
 ```
 http://localhost:8080/clientes
 ```
+![image](https://github.com/user-attachments/assets/c7964e92-7bd8-4694-b794-08222a93616e)
 
 <br>
 ## Obtener Cliente por ID (GET)
-<br>
 Método: GET
 URL: 
 ```
 http://localhost:8080/clientes/{id}
 ```
+![image](https://github.com/user-attachments/assets/19e85284-b0b0-4336-afc3-d6546445ee43)
 
 
 ## Actualizar Cliente (PUT)
@@ -72,6 +74,7 @@ URL:
 ```
 http://localhost:8080/clientes/{id}
 ```
+![image](https://github.com/user-attachments/assets/a5f84c4e-9a44-48b3-bd2a-afa7b7c792e4)
 
 Body: (mismo formato que en la creación)
 
@@ -81,11 +84,15 @@ URL:
 ```
 http://localhost:8080/clientes/{id}
 ```
+Ejecutamos el metodo Delete.
+![image](https://github.com/user-attachments/assets/fcdc49db-7597-4c07-8053-cb8d65491e6c)
+Para despues verificar que este se haya eliminado enlistando a los clientes, deberia aparecer nada mas uno, porque el segundo ya fue eliminado.
+![image](https://github.com/user-attachments/assets/2c43dd2c-6cd3-4f67-991c-64098773c8e4)
+
 
 
 ## 📌 Cuenta
 ### Crear Cuenta (POST)
-<br>
 Método: POST <br>
 Headers: Content-Type: application/json <br>
 URL: 
@@ -95,7 +102,7 @@ http://localhost:8080/cuentas
 
 Body:
 ```
-json{
+{
   "numeroCuenta": 478758,
   "tipoCuenta": "Ahorro",
   "saldoInicial": 2000,
@@ -103,7 +110,9 @@ json{
   "clienteId": "jose.lema"
 }
 ```
-Show Image
+
+![image](https://github.com/user-attachments/assets/1ca2da74-cb93-41ac-aaaf-d8406c45880e)
+
 
 
 ### Obtener Todas las Cuentas (GET)
@@ -112,6 +121,7 @@ URL:
 ```
 http://localhost:8080/cuentas
 ```
+![image](https://github.com/user-attachments/assets/5ba3691d-bcc7-451e-99e5-38a01d545667)
 
 
 ### Obtener Cuenta por Número (GET)
@@ -120,8 +130,8 @@ URL:
 ```
 http://localhost:8080/cuentas/{numeroCuenta}
 ```
+![image](https://github.com/user-attachments/assets/1fec5c8e-15fa-48fe-ba48-4203a7b6897c)
 
-Show Image
 
 ### Actualizar Cuenta (PUT)
 Método: PUT <br>
@@ -132,6 +142,8 @@ http://localhost:8080/cuentas/{numeroCuenta}
 ```
 
 Body: (mismo formato que en la creación)
+![image](https://github.com/user-attachments/assets/3d98b4fc-3848-435d-86cf-7b7d67cb6648)
+
 
 ## Eliminar Cuenta (DELETE)
 Método: DELETE <br>
@@ -139,6 +151,7 @@ URL:
 ```
 http://localhost:8080/cuentas/{numeroCuenta}
 ```
+![image](https://github.com/user-attachments/assets/164366c4-df36-46a8-8c06-02d019284cc1)
 
 
 
@@ -161,10 +174,14 @@ json{
   "tipoMovimiento": "Depósito",
   "valor": 500,
   "saldo": 0,
-  "numeroCuenta": 478758
+  "numeroCuenta": 110101
 }
 
 ```
+
+![image](https://github.com/user-attachments/assets/0a875b48-af2a-4daf-9627-d15c75c25c80)
+
+
 ### Resultado esperado:
 
 Estado: 201 Created
