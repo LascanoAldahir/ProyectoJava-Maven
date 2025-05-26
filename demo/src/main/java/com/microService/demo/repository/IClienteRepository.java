@@ -1,3 +1,5 @@
+//IClienteRepository
+
 package com.microService.demo.repository;
 
 import com.microService.demo.model.Cliente;
@@ -8,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface IClienteRepository  extends JpaRepository<Cliente, Long> {
-    // Método personalizado para buscar un cliente por su clienteId
+    // Metodo personalizado para buscar un cliente por su clienteId
     Optional<Cliente> findByClienteId(String clienteId);
 }

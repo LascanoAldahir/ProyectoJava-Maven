@@ -1,9 +1,10 @@
+//MovimientoServiceImpl
+
 package com.microService.demo.services.impl;
 
 import com.microService.demo.dto.CuentaSaldoDTO;
 import com.microService.demo.dto.EstadoCuentaDTO;
 import com.microService.demo.dto.MovimientoDTO;
-import com.microService.demo.dto.MovimientoReporteDTO;
 import com.microService.demo.model.Cuenta;
 import com.microService.demo.model.Cliente;
 import com.microService.demo.model.Movimiento;

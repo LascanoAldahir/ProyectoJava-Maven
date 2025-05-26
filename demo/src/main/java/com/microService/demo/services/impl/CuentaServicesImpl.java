@@ -1,8 +1,11 @@
+//CuentaServicesImpl.java
+
 package com.microService.demo.services.impl;
 
 import com.microService.demo.dto.CuentaDTO;
 import com.microService.demo.model.Cliente;
 import com.microService.demo.model.Cuenta;
+import com.microService.demo.repository.IClienteRepository;
 import com.microService.demo.repository.ICuentaRepository;
 import com.microService.demo.services.ICuentaServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +22,8 @@ public class CuentaServicesImpl implements ICuentaServices {
     private ICuentaRepository cuentaRepository;
 
     // Dependiendo de tu implementación, podrías necesitar también el repositorio de clientes
-    // @Autowired
-    // private IClienteRepository clienteRepository;
+    @Autowired
+    private IClienteRepository clienteRepository;
 
     @Override
     public List<CuentaDTO> findAll() {
@@ -78,7 +81,7 @@ public class CuentaServicesImpl implements ICuentaServices {
         cuentaRepository.deleteById(numeroCuenta);
     }
 
-    // Método auxiliar para convertir una entidad Cuenta a CuentaDTO
+    // Metodo auxiliar para convertir una entidad Cuenta a CuentaDTO
     private CuentaDTO convertToDTO(Cuenta cuenta) {
         CuentaDTO dto = new CuentaDTO();
         dto.setNumeroCuenta(cuenta.getNumeroCuenta());
@@ -93,7 +96,7 @@ public class CuentaServicesImpl implements ICuentaServices {
         return dto;
     }
 
-    // Método auxiliar para convertir un CuentaDTO a entidad Cuenta
+    // Metodo auxiliar para convertir un CuentaDTO a entidad Cuenta
     private Cuenta convertToEntity(CuentaDTO dto) {
         Cuenta cuenta = new Cuenta();
         cuenta.setNumeroCuenta(dto.getNumeroCuenta());
@@ -101,10 +104,12 @@ public class CuentaServicesImpl implements ICuentaServices {
         cuenta.setSaldoInicial(dto.getSaldoInicial());
         cuenta.setEstado(dto.isEstado());
 
-        // Aquí necesitaríamos buscar el cliente por su clienteId
-        // Esta parte dependerá de cómo tengas implementado tu repositorio de clientes
-        // Por ahora lo dejamos como null
-        cuenta.setCliente(null);
+        // FIX: Buscar cliente por clienteId
+        if (dto.getClienteId() != null) {
+            Cliente cliente = clienteRepository.findByClienteId(dto.getClienteId())
+                    .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+            cuenta.setCliente(cliente);
+        }
 
         return cuenta;
     }

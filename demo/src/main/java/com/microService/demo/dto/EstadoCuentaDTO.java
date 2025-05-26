@@ -1,3 +1,4 @@
+
 package com.microService.demo.dto;
 
 import lombok.AllArgsConstructor;
@@ -25,29 +26,4 @@ public class EstadoCuentaDTO {
     //Detalle de todos los movimientos en el periodo
     private List<MovimientoReporteDTO> movimientos;
 }
-// DTO para mostrar cuentas y saldos en el reporte
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class CuentaSaldoDTO {
-    private Long numeroCuenta;
-    private String tipoCuenta;
-    private double saldoInicial;
-    private double saldoFinal;
-    private boolean estado;
-}
 
-// DTO para mostrar movimientos en el reporte
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class MovimientoReporteDTO {
-    private LocalDate fecha;
-    private Long numeroCuenta;
-    private String tipoCuenta;
-    private double saldoInicial;
-    private String tipoMovimiento;
-    private double valor;
-    private double saldoDisponible;
-    private boolean estado;
-}

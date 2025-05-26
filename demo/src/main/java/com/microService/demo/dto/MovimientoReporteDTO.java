@@ -1,3 +1,5 @@
+//MovimientoReporteDTO
+
 package com.microService.demo.dto;
 
 import lombok.AllArgsConstructor;
@@ -5,10 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
+// DTO para mostrar movimientos en el reporte
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MovimientoReporteDTO {
+class MovimientoReporteDTO {
     private LocalDate fecha;
     private Long numeroCuenta;
     private String tipoCuenta;
