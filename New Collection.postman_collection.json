@@ -1,0 +1,290 @@
+{
+	"info": {
+		"_postman_id": "c071d3f6-05b2-406b-be48-df6127d9a6d6",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34779053",
+		"_collection_link": "https://www.postman.com/universal-spaceship-984843/workspace/proyectojava-maven/collection/34779053-c071d3f6-05b2-406b-be48-df6127d9a6d6?action=share&source=collection_link&creator=34779053"
+	},
+	"item": [
+		{
+			"name": "Cliente",
+			"item": [
+				{
+					"name": "Crear Cliente",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Jose Lema\",\r\n    \"genero\": \"masculino\",\r\n    \"edad\": 35,\r\n    \"identificacion\": 123456789,\r\n    \"direccion\": \"Otavalo sn y principal\",\r\n    \"telefono\": \"0982547858\",\r\n    \"clienteId\": \"josele.ma\",\r\n    \"contrasena\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/clientes"
+					},
+					"response": []
+				},
+				{
+					"name": "Ver Todos los Clientes",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8082/clientes"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Cliente por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8082/clientes/2"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Cliente",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Aldahir Lascano\",\r\n    \"genero\": \"masculino\",\r\n    \"edad\": 22,\r\n    \"identificacion\": 1750949800,\r\n    \"direccion\": \"Ferroviaria Baja\",\r\n    \"telefono\": \"0998341271\",\r\n    \"clienteId\": \"aldahirlascano\",\r\n    \"contrasena\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/clientes/2"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Cliente",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8082/clientes/2"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cuenta",
+			"item": [
+				{
+					"name": "Crear Cuenta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"numeroCuenta\": 47858,\r\n  \"tipoCuenta\": \"Ahorro\",\r\n  \"saldoInicial\": 2000,\r\n  \"estado\": true,\r\n  \"clienteId\": \"joseslema\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/cuentas"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Todas las Cuentas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8082/cuentas"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Cuenta por Número",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8082/cuentas/478758"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualzar Cuenta",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"numeroCuenta\": 47898,\r\n  \"tipoCuenta\": \"Ahorro\",\r\n  \"saldoInicial\": 69000,\r\n  \"estado\": true,\r\n  \"clienteId\": \"joselema\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/cuentas/478758"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Cuenta",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/cuentas/47898"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movimientos y Validaciòn de Saldo",
+			"item": [
+				{
+					"name": "Crear un depòsito",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fecha\": \"2023-05-19\",\r\n  \"tipoMovimiento\": \"Depósito\",\r\n  \"valor\": 500,\r\n  \"saldo\": 0,\r\n  \"numeroCuenta\": 478758\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/movimientos"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear un retiro",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fecha\": \"2023-05-19\",\r\n  \"tipoMovimiento\": \"Retiro\",\r\n  \"valor\": -300,\r\n  \"saldo\": 0,\r\n  \"numeroCuenta\": 478758\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/movimientos"
+					},
+					"response": []
+				},
+				{
+					"name": "Verificar Saldo Actualizado",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/cuentas/478758"
+					},
+					"response": []
+				},
+				{
+					"name": "Validar protección de saldo insuficiente",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fecha\": \"2023-05-19\",\r\n  \"tipoMovimiento\": \"Retiro\",\r\n  \"valor\": -322000,\r\n  \"saldo\": 0,\r\n  \"numeroCuenta\": 478758\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/movimientos"
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar historial de movimientos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8082/movimientos/cuenta/478758"
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar un movimiento existente",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fecha\": \"2023-05-19\",\r\n  \"tipoMovimiento\": \"Depósito\",\r\n  \"valor\": 400,\r\n  \"saldo\": 0,\r\n  \"numeroCuenta\": 478758\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/movimientos/3"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un movimiento",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8082/movimientos/3"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
