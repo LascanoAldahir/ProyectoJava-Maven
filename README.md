@@ -26,7 +26,7 @@ Método: POST <br>
 Headers: Content-Type: application/json <br>
 URL:
 ```
-http://localhost:8080/clientes
+http://localhost:8082/clientes
 ```
 Body:
 ```
@@ -42,20 +42,26 @@ json{
   "estado": true
 }
 ```
-![image](https://github.com/user-attachments/assets/51a29a68-9023-4377-a161-c9a3dd94b2a8)
-<br>
-![image](https://github.com/user-attachments/assets/04381132-4f38-4631-a9da-bf98d0ff7b61)
+### Creación Exitosa
 
-<br>
+![image](https://github.com/user-attachments/assets/fe43e6c7-730a-4d03-a1d9-ec0d85c7a2c9)
 
+### Crear un usuario existente
+
+![image](https://github.com/user-attachments/assets/42efc4a6-94f9-4a83-bff5-a970f59b2d4d)
+
+### Id o datos no validos
+
+![image](https://github.com/user-attachments/assets/c556de13-f015-4c45-915c-79787452d35f)
 
 ## Obtener Todos los Clientes (GET)
 Método: GET
 URL: 
 ```
-http://localhost:8080/clientes
+http://localhost:8082/clientes
 ```
-![image](https://github.com/user-attachments/assets/c7964e92-7bd8-4694-b794-08222a93616e)
+![image](https://github.com/user-attachments/assets/348939e3-26a3-4c71-94b9-30681e7c08d6)
+
 
 <br>
 ## Obtener Cliente por ID (GET)
