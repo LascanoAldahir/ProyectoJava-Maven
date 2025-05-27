@@ -1,5 +1,4 @@
 //MovimientoServiceImpl
-
 package com.microService.demo.services.impl;
 
 import com.microService.demo.dto.CuentaSaldoDTO;
@@ -62,15 +61,16 @@ public class MovimientoServiceImpl implements IMovimientoServices {
 
     @Override
     public MovimientoDTO save(MovimientoDTO movimientoDTO) {
-        // Obtener la cuenta asociada al movimiento
-        Cuenta cuenta = cuentaRepository.findById(movimientoDTO.getNumeroCuenta())
+        // Convertir String a Long para buscar la cuenta
+        Long numeroCuenta = Long.parseLong(movimientoDTO.getNumeroCuenta());
+        Cuenta cuenta = cuentaRepository.findById(numeroCuenta)
                 .orElseThrow(() -> new RuntimeException("Cuenta no encontrada"));
 
-        // Verificar si hay saldo disponible para retiros
+        // Convertir String a Double para el valor
+        double valor = Double.parseDouble(movimientoDTO.getValor());
         double saldoActual = cuenta.getSaldoInicial();
-        double valor = movimientoDTO.getValor();
 
-        // Si es un retiro (valor negativo) y no hay saldo suficiente
+        // Verificar saldo para retiros
         if (valor < 0 && (saldoActual + valor) < 0) {
             throw new RuntimeException("Saldo no disponible");
         }
@@ -98,40 +98,34 @@ public class MovimientoServiceImpl implements IMovimientoServices {
     @Override
     public MovimientoDTO update(Long id, MovimientoDTO movimientoDTO) {
         if (movimientoRepository.existsById(id)) {
-            // Obtener el movimiento original para comparar
             Movimiento originalMovimiento = movimientoRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Movimiento no encontrado"));
 
-            // Obtener la cuenta asociada al movimiento
-            Cuenta cuenta = cuentaRepository.findById(movimientoDTO.getNumeroCuenta())
+            Long numeroCuenta = Long.parseLong(movimientoDTO.getNumeroCuenta());
+            Cuenta cuenta = cuentaRepository.findById(numeroCuenta)
                     .orElseThrow(() -> new RuntimeException("Cuenta no encontrada"));
 
-            // Calcular la diferencia entre el valor original y el nuevo
-            double diferencia = movimientoDTO.getValor() - originalMovimiento.getValor();
+            double nuevoValor = Double.parseDouble(movimientoDTO.getValor());
+            double diferencia = nuevoValor - originalMovimiento.getValor();
 
-            // Verificar si hay saldo disponible para la diferencia (si es negativa)
             double saldoActual = cuenta.getSaldoInicial();
             if (diferencia < 0 && (saldoActual + diferencia) < 0) {
                 throw new RuntimeException("Saldo no disponible");
             }
 
-            // Actualizar el movimiento
             Movimiento movimiento = new Movimiento();
             movimiento.setId(id);
             movimiento.setFecha(movimientoDTO.getFecha());
             movimiento.setTipoMovimiento(movimientoDTO.getTipoMovimiento());
-            movimiento.setValor(movimientoDTO.getValor());
+            movimiento.setValor(nuevoValor);
             movimiento.setCuenta(cuenta);
 
-            // Calcular nuevo saldo
             double nuevoSaldo = saldoActual + diferencia;
             movimiento.setSaldo(nuevoSaldo);
 
-            // Actualizar saldo de la cuenta
             cuenta.setSaldoInicial(nuevoSaldo);
             cuentaRepository.save(cuenta);
 
-            // Guardar cambios
             Movimiento updatedMovimiento = movimientoRepository.save(movimiento);
             return convertToDTO(updatedMovimiento);
         }
@@ -140,52 +134,64 @@ public class MovimientoServiceImpl implements IMovimientoServices {
 
     @Override
     public void delete(Long id) {
-        // Verificar que el movimiento existe
         Movimiento movimiento = movimientoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Movimiento no encontrado"));
 
-        // Actualizar el saldo de la cuenta
         Cuenta cuenta = movimiento.getCuenta();
         if (cuenta != null) {
             cuenta.setSaldoInicial(cuenta.getSaldoInicial() - movimiento.getValor());
             cuentaRepository.save(cuenta);
         }
 
-        // Eliminar el movimiento
         movimientoRepository.deleteById(id);
     }
 
     @Override
     public EstadoCuentaDTO generarReporteEstadoCuenta(String clienteId, LocalDate fechaInicio, LocalDate fechaFin) {
-        // Implementación básica por ahora ya que solo estamos hasta F3
         return new EstadoCuentaDTO();
     }
 
+    // MÉTODO CORREGIDO: Convierte Double/Long a String
     private MovimientoDTO convertToDTO(Movimiento movimiento) {
         MovimientoDTO dto = new MovimientoDTO();
         dto.setId(movimiento.getId());
         dto.setFecha(movimiento.getFecha());
         dto.setTipoMovimiento(movimiento.getTipoMovimiento());
-        dto.setValor(movimiento.getValor());
-        dto.setSaldo(movimiento.getSaldo());
+        dto.setValor(String.valueOf(movimiento.getValor())); // Double -> String
+        dto.setSaldo(String.valueOf(movimiento.getSaldo())); // Double -> String
 
         if (movimiento.getCuenta() != null) {
-            dto.setNumeroCuenta(movimiento.getCuenta().getNumeroCuenta());
+            dto.setNumeroCuenta(String.valueOf(movimiento.getCuenta().getNumeroCuenta())); // Long -> String
         }
         return dto;
     }
 
+    // MÉTODO CORREGIDO: Convierte String a Double/Long
     private Movimiento convertToEntity(MovimientoDTO dto) {
         Movimiento movimiento = new Movimiento();
         movimiento.setId(dto.getId());
         movimiento.setFecha(dto.getFecha());
         movimiento.setTipoMovimiento(dto.getTipoMovimiento());
-        movimiento.setValor(dto.getValor());
-        movimiento.setSaldo(dto.getSaldo());
 
+        // Convertir String a Double
+        try {
+            movimiento.setValor(Double.parseDouble(dto.getValor()));
+            if (dto.getSaldo() != null) {
+                movimiento.setSaldo(Double.parseDouble(dto.getSaldo()));
+            }
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Valor numérico inválido");
+        }
+
+        // Convertir String a Long para buscar cuenta
         if (dto.getNumeroCuenta() != null) {
-            cuentaRepository.findById(dto.getNumeroCuenta())
-                    .ifPresent(movimiento::setCuenta);
+            try {
+                Long numeroCuenta = Long.parseLong(dto.getNumeroCuenta());
+                cuentaRepository.findById(numeroCuenta)
+                        .ifPresent(movimiento::setCuenta);
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("Número de cuenta inválido");
+            }
         }
 
         return movimiento;

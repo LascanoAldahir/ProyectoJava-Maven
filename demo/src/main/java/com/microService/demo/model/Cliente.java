@@ -4,13 +4,13 @@ package com.microService.demo.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-
 
 @Entity
 @Table(name = "clientes")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cliente extends Persona{
@@ -25,7 +25,8 @@ public class Cliente extends Persona{
     private String contrasena;
     private boolean estado;
 
-    public Cliente(String nombre, String genero, int edad, int identificacion,
+    // Constructor que incluye campos de Persona
+    public Cliente(String nombre, String genero, int edad, long identificacion,
                    String direccion, String telefono, String clienteId,
                    String contrasena, boolean estado) {
         super(nombre, genero, edad, identificacion, direccion, telefono);

@@ -17,17 +17,14 @@ import java.util.stream.Collectors;
 @Service
 public class CuentaServicesImpl implements ICuentaServices {
 
-    // Inyectamos el repositorio de cuentas
     @Autowired
     private ICuentaRepository cuentaRepository;
 
-    // Dependiendo de tu implementación, podrías necesitar también el repositorio de clientes
     @Autowired
     private IClienteRepository clienteRepository;
 
     @Override
     public List<CuentaDTO> findAll() {
-        // Obtenemos todas las cuentas y las convertimos a DTOs
         return cuentaRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -35,7 +32,6 @@ public class CuentaServicesImpl implements ICuentaServices {
 
     @Override
     public CuentaDTO findByNumeroCuenta(Long numeroCuenta) {
-        // Buscamos una cuenta por su número
         return cuentaRepository.findById(numeroCuenta)
                 .map(this::convertToDTO)
                 .orElse(null);
@@ -43,7 +39,6 @@ public class CuentaServicesImpl implements ICuentaServices {
 
     @Override
     public List<CuentaDTO> findByClienteId(Long clienteId) {
-        // Buscamos todas las cuentas de un cliente específico
         return cuentaRepository.findByClienteId(clienteId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -51,25 +46,17 @@ public class CuentaServicesImpl implements ICuentaServices {
 
     @Override
     public CuentaDTO save(CuentaDTO cuentaDTO) {
-        // Convertimos el DTO a entidad
         Cuenta cuenta = convertToEntity(cuentaDTO);
-        // Guardamos la entidad
         Cuenta savedCuenta = cuentaRepository.save(cuenta);
-        // Convertimos la entidad guardada a DTO
         return convertToDTO(savedCuenta);
     }
 
     @Override
     public CuentaDTO update(Long numeroCuenta, CuentaDTO cuentaDTO) {
-        // Verificamos si la cuenta existe
         if (cuentaRepository.existsById(numeroCuenta)) {
-            // Convertimos el DTO a entidad
             Cuenta cuenta = convertToEntity(cuentaDTO);
-            // Aseguramos que el número de cuenta sea el correcto
             cuenta.setNumeroCuenta(numeroCuenta);
-            // Guardamos los cambios
             Cuenta updatedCuenta = cuentaRepository.save(cuenta);
-            // Convertimos la entidad actualizada a DTO
             return convertToDTO(updatedCuenta);
         }
         return null;
@@ -77,34 +64,46 @@ public class CuentaServicesImpl implements ICuentaServices {
 
     @Override
     public void delete(Long numeroCuenta) {
-        // Eliminamos la cuenta con el número proporcionado
         cuentaRepository.deleteById(numeroCuenta);
     }
 
-    // Metodo auxiliar para convertir una entidad Cuenta a CuentaDTO
+    // MÉTODO CORREGIDO: Convierte String a Long para numeroCuenta
     private CuentaDTO convertToDTO(Cuenta cuenta) {
         CuentaDTO dto = new CuentaDTO();
-        dto.setNumeroCuenta(cuenta.getNumeroCuenta());
+        dto.setNumeroCuenta(String.valueOf(cuenta.getNumeroCuenta())); // Long -> String
         dto.setTipoCuenta(cuenta.getTipoCuenta());
-        dto.setSaldoInicial(cuenta.getSaldoInicial());
+        dto.setSaldoInicial(String.valueOf(cuenta.getSaldoInicial())); // Double -> String
         dto.setEstado(cuenta.isEstado());
 
-        // Si la cuenta tiene un cliente asociado, obtenemos su clienteId
         if (cuenta.getCliente() != null) {
             dto.setClienteId(cuenta.getCliente().getClienteId());
         }
         return dto;
     }
 
-    // Metodo auxiliar para convertir un CuentaDTO a entidad Cuenta
+    // MÉTODO CORREGIDO: Convierte String a Long/Double para la entidad
     private Cuenta convertToEntity(CuentaDTO dto) {
         Cuenta cuenta = new Cuenta();
-        cuenta.setNumeroCuenta(dto.getNumeroCuenta());
+
+        // Convertir String a Long para numeroCuenta
+        try {
+            cuenta.setNumeroCuenta(Long.parseLong(dto.getNumeroCuenta()));
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Número de cuenta inválido: " + dto.getNumeroCuenta());
+        }
+
         cuenta.setTipoCuenta(dto.getTipoCuenta());
-        cuenta.setSaldoInicial(dto.getSaldoInicial());
+
+        // Convertir String a Double para saldoInicial
+        try {
+            cuenta.setSaldoInicial(Double.parseDouble(dto.getSaldoInicial()));
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Saldo inicial inválido: " + dto.getSaldoInicial());
+        }
+
         cuenta.setEstado(dto.isEstado());
 
-        // FIX: Buscar cliente por clienteId
+        // Buscar cliente por clienteId
         if (dto.getClienteId() != null) {
             Cliente cliente = clienteRepository.findByClienteId(dto.getClienteId())
                     .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));

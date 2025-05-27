@@ -82,7 +82,7 @@ public class ClienteServicesImpl implements IClienteServices {
         cliente.setNombre(dto.getNombre());
         cliente.setGenero(dto.getGenero());
         cliente.setEdad(dto.getEdad());
-        cliente.setIdentificacion(dto.getIdentificacion());
+        cliente.setIdentificacion(dto.getIdentificacion().longValue());
         cliente.setDireccion(dto.getDireccion());
         cliente.setTelefono(dto.getTelefono());
         cliente.setClienteId(dto.getClienteId());

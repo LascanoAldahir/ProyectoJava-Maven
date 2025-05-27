@@ -1,5 +1,3 @@
-//CuentaController.java
-
 package com.microService.demo.Controller;
 
 import com.microService.demo.dto.CuentaDTO;
@@ -16,6 +14,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/cuentas")
 public class CuentaController {
+
     @Autowired
     private ICuentaServices cuentaService;
 
@@ -91,46 +90,83 @@ public class CuentaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCuenta(@Valid @RequestBody CuentaDTO cuentaDTO) {
-        // Validaciones de negocio
-        if (cuentaDTO.getNumeroCuenta() == null || cuentaDTO.getNumeroCuenta() <= 0) {
-            return new ResponseEntity<>(
-                    Map.of("error", "Número de cuenta inválido", "mensaje", "El número de cuenta debe ser positivo"),
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-
-        if (cuentaDTO.getTipoCuenta() == null || cuentaDTO.getTipoCuenta().trim().isEmpty()) {
-            return new ResponseEntity<>(
-                    Map.of("error", "Tipo de cuenta requerido", "mensaje", "Debe especificar el tipo de cuenta"),
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-
-        if (!cuentaDTO.getTipoCuenta().matches("^(Ahorro|Corriente|Ahorros)$")) {
-            return new ResponseEntity<>(
-                    Map.of("error", "Tipo de cuenta inválido", "mensaje", "Los tipos válidos son: Ahorro, Corriente, Ahorros"),
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-
-        if (cuentaDTO.getSaldoInicial() < 0) {
-            return new ResponseEntity<>(
-                    Map.of("error", "Saldo inicial inválido", "mensaje", "El saldo inicial no puede ser negativo"),
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-
-        if (cuentaDTO.getClienteId() == null || cuentaDTO.getClienteId().trim().isEmpty()) {
-            return new ResponseEntity<>(
-                    Map.of("error", "Cliente ID requerido", "mensaje", "Debe especificar el ID del cliente"),
-                    HttpStatus.BAD_REQUEST
-            );
-        }
-
+    public ResponseEntity<?> createCuenta(@RequestBody CuentaDTO cuentaDTO) {
         try {
+            // Validar número de cuenta
+            if (cuentaDTO.getNumeroCuenta() == null || cuentaDTO.getNumeroCuenta().trim().isEmpty()) {
+                return new ResponseEntity<>(
+                        Map.of("error", "Número de cuenta requerido", "mensaje", "El número de cuenta es obligatorio"),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
+            // Validar que sea numérico y positivo
+            Long numeroCuentaLong = null;
+            try {
+                numeroCuentaLong = Long.parseLong(cuentaDTO.getNumeroCuenta());
+                if (numeroCuentaLong <= 0) {
+                    return new ResponseEntity<>(
+                            Map.of("error", "Número de cuenta inválido", "mensaje", "El número de cuenta debe ser positivo"),
+                            HttpStatus.BAD_REQUEST
+                    );
+                }
+            } catch (NumberFormatException e) {
+                return new ResponseEntity<>(
+                        Map.of("error", "Número de cuenta inválido", "mensaje", "El número de cuenta debe contener solo números"),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
+            // Validar tipo de cuenta
+            if (cuentaDTO.getTipoCuenta() == null || cuentaDTO.getTipoCuenta().trim().isEmpty()) {
+                return new ResponseEntity<>(
+                        Map.of("error", "Tipo de cuenta requerido", "mensaje", "Debe especificar el tipo de cuenta"),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
+            // Normalizar tipo de cuenta
+            cuentaDTO.setTipoCuenta(cuentaDTO.getTipoCuenta());
+            if (!cuentaDTO.getTipoCuenta().matches("^(Ahorro|Corriente)$")) {
+                return new ResponseEntity<>(
+                        Map.of("error", "Tipo de cuenta inválido", "mensaje", "Los tipos válidos son: Ahorro o Corriente"),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
+            // Validar saldo inicial
+            if (cuentaDTO.getSaldoInicial() == null || cuentaDTO.getSaldoInicial().trim().isEmpty()) {
+                return new ResponseEntity<>(
+                        Map.of("error", "Saldo inicial requerido", "mensaje", "El saldo inicial es obligatorio"),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
+            try {
+                double saldoInicial = Double.parseDouble(cuentaDTO.getSaldoInicial());
+                if (saldoInicial < 0) {
+                    return new ResponseEntity<>(
+                            Map.of("error", "Saldo inicial inválido", "mensaje", "El saldo inicial no puede ser negativo"),
+                            HttpStatus.BAD_REQUEST
+                    );
+                }
+            } catch (NumberFormatException e) {
+                return new ResponseEntity<>(
+                        Map.of("error", "Saldo inicial inválido", "mensaje", "El saldo inicial debe ser un número válido"),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
+            // Validar cliente ID
+            if (cuentaDTO.getClienteId() == null || cuentaDTO.getClienteId().trim().isEmpty()) {
+                return new ResponseEntity<>(
+                        Map.of("error", "Cliente ID requerido", "mensaje", "Debe especificar el ID del cliente"),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
             // Verificar si ya existe cuenta con ese número
-            CuentaDTO existente = cuentaService.findByNumeroCuenta(cuentaDTO.getNumeroCuenta());
+            CuentaDTO existente = cuentaService.findByNumeroCuenta(numeroCuentaLong);
             if (existente != null) {
                 return new ResponseEntity<>(
                         Map.of("error", "Cuenta duplicada", "mensaje", "Ya existe una cuenta con número: " + cuentaDTO.getNumeroCuenta()),
@@ -138,11 +174,13 @@ public class CuentaController {
                 );
             }
 
+            // Crear cuenta
             CuentaDTO newCuenta = cuentaService.save(cuentaDTO);
             return new ResponseEntity<>(
                     Map.of("mensaje", "Cuenta creada exitosamente", "cuenta", newCuenta),
                     HttpStatus.CREATED
             );
+
         } catch (RuntimeException e) {
             if (e.getMessage().contains("Cliente no encontrado")) {
                 return new ResponseEntity<>(
@@ -154,11 +192,16 @@ public class CuentaController {
                     Map.of("error", "Error al crear cuenta", "detalle", e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    Map.of("error", "Error interno", "detalle", e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 
     @PutMapping("/{numeroCuenta}")
-    public ResponseEntity<?> updateCuenta(@PathVariable Long numeroCuenta, @Valid @RequestBody CuentaDTO cuentaDTO) {
+    public ResponseEntity<?> updateCuenta(@PathVariable Long numeroCuenta, @RequestBody CuentaDTO cuentaDTO) {
         if (numeroCuenta == null || numeroCuenta <= 0) {
             return new ResponseEntity<>(
                     Map.of("error", "Número de cuenta inválido", "mensaje", "El número de cuenta debe ser positivo"),

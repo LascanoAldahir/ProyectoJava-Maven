@@ -66,57 +66,103 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCliente(@Valid @RequestBody ClienteDTO clienteDTO) {
-        // Validaciones de negocio
+    public ResponseEntity<?> createCliente(@RequestBody ClienteDTO clienteDTO) {
+        // Validar nombre
         if (clienteDTO.getNombre() == null || clienteDTO.getNombre().trim().isEmpty()) {
-            return new ResponseEntity<>(
-                    Map.of("error", "Nombre requerido", "mensaje", "El nombre del cliente es obligatorio"),
-                    HttpStatus.BAD_REQUEST
-            );
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Nombre requerido",
+                            "mensaje", "El nombre del cliente es obligatorio"));
         }
 
+        if (!clienteDTO.getNombre().matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]{2,50}$")) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Nombre inválido",
+                            "mensaje", "El nombre solo puede contener letras y espacios (2-50 caracteres)"));
+        }
+
+        // Validar género
+        if (clienteDTO.getGenero() == null || clienteDTO.getGenero().trim().isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Género requerido",
+                            "mensaje", "El género es obligatorio"));
+        }
+
+        if (!clienteDTO.getGenero().toLowerCase().matches("^(masculino|femenino)$")) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Género inválido",
+                            "mensaje", "El género debe ser: Masculino o Femenino"));
+        }
+
+        // Validar edad
+        if (clienteDTO.getEdad() == null || clienteDTO.getEdad() < 18 || clienteDTO.getEdad() > 120) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Edad inválida",
+                            "mensaje", "La edad debe estar entre 18 y 120 años"));
+        }
+
+        // Validar identificación
+        if (clienteDTO.getIdentificacion() == null ||
+                clienteDTO.getIdentificacion() < 10000000L ||
+                clienteDTO.getIdentificacion() > 999999999999999L) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Identificación inválida",
+                            "mensaje", "La identificación debe tener entre 8 y 15 dígitos"));
+        }
+        // Validar dirección
+        if (clienteDTO.getDireccion() == null || clienteDTO.getDireccion().trim().length() < 5) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Dirección inválida",
+                            "mensaje", "La dirección debe tener al menos 5 caracteres"));
+        }
+        // Validar teléfono
+        if (clienteDTO.getTelefono() == null || !clienteDTO.getTelefono().matches("^\\d{10}$")) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Teléfono inválido",
+                            "mensaje", "El teléfono debe contener exactamente 10 dígitos"));
+        }
+        // Validar clienteId - AQUÍ ESTÁ TU PROBLEMA ESPECÍFICO
         if (clienteDTO.getClienteId() == null || clienteDTO.getClienteId().trim().isEmpty()) {
-            return new ResponseEntity<>(
-                    Map.of("error", "Cliente ID requerido", "mensaje", "El ID del cliente es obligatorio"),
-                    HttpStatus.BAD_REQUEST
-            );
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "ID de cliente requerido",
+                            "mensaje", "El ID del cliente es obligatorio"));
         }
-
-        if (clienteDTO.getEdad() < 18) {
-            return new ResponseEntity<>(
-                    Map.of("error", "Edad inválida", "mensaje", "El cliente debe ser mayor de edad (18+ años)"),
-                    HttpStatus.BAD_REQUEST
-            );
+        if (!clienteDTO.getClienteId().matches("^[a-zA-Z0-9]{3,20}$")) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "ID de cliente inválido",
+                            "mensaje", "El ID del cliente solo puede contener letras y números (3-20 caracteres, sin espacios ni caracteres especiales)",
+                            "valor_rechazado", clienteDTO.getClienteId(),
+                            "caracteres_validos", "Solo letras (a-z, A-Z) y números (0-9)"));
         }
-
+        // Validar contraseña
         if (clienteDTO.getContrasena() == null || clienteDTO.getContrasena().length() < 4) {
-            return new ResponseEntity<>(
-                    Map.of("error", "Contraseña inválida", "mensaje", "La contraseña debe tener al menos 4 caracteres"),
-                    HttpStatus.BAD_REQUEST
-            );
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Contraseña inválida",
+                            "mensaje", "La contraseña debe tener al menos 4 caracteres"));
         }
 
         try {
             // Verificar si ya existe cliente con ese clienteId
             ClienteDTO existente = clienteService.findByClienteId(clienteDTO.getClienteId());
             if (existente != null) {
-                return new ResponseEntity<>(
-                        Map.of("error", "Cliente duplicado", "mensaje", "Ya existe un cliente con ID: " + clienteDTO.getClienteId()),
-                        HttpStatus.CONFLICT
-                );
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(Map.of("error", "Cliente duplicado",
+                                "mensaje", "Ya existe un cliente con ID: " + clienteDTO.getClienteId()));
             }
 
+            // Normalizar género
+            clienteDTO.setGenero(clienteDTO.getGenero());
+
             ClienteDTO newCliente = clienteService.save(clienteDTO);
-            return new ResponseEntity<>(
-                    Map.of("mensaje", "Cliente creado exitosamente", "cliente", newCliente),
-                    HttpStatus.CREATED
-            );
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(Map.of("mensaje", "Cliente creado exitosamente",
+                            "cliente", newCliente));
+
         } catch (Exception e) {
-            return new ResponseEntity<>(
-                    Map.of("error", "Error al crear cliente", "detalle", e.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error al crear cliente",
+                            "mensaje", e.getMessage()));
         }
+
     }
 
     @PutMapping("/{id}")
