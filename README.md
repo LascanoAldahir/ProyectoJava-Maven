@@ -55,22 +55,27 @@ json{
 ![image](https://github.com/user-attachments/assets/c556de13-f015-4c45-915c-79787452d35f)
 
 ## Obtener Todos los Clientes (GET)
+
 Método: GET
 URL: 
+
 ```
 http://localhost:8082/clientes
 ```
-![image](https://github.com/user-attachments/assets/348939e3-26a3-4c71-94b9-30681e7c08d6)
+
+![image](https://github.com/user-attachments/assets/41558e4f-8e4d-4a4e-a50d-06266559aafc)
 
 
-<br>
 ## Obtener Cliente por ID (GET)
 Método: GET
 URL: 
 ```
-http://localhost:8080/clientes/{id}
+http://localhost:8082/clientes/{id}
 ```
-![image](https://github.com/user-attachments/assets/19e85284-b0b0-4336-afc3-d6546445ee43)
+![image](https://github.com/user-attachments/assets/2cbdd020-e551-4bbf-87da-53fa2ab8618e)
+
+## Obtener Cliente por ID (NO EXISTENTE)
+![image](https://github.com/user-attachments/assets/3a67f161-b1d7-4e2a-90c0-9e2ced60b2b3)
 
 
 ## Actualizar Cliente (PUT)
@@ -78,9 +83,10 @@ Método: PUT <br>
 Headers: Content-Type: application/json <br>
 URL: 
 ```
-http://localhost:8080/clientes/{id}
+http://localhost:8082/clientes/{id}
 ```
-![image](https://github.com/user-attachments/assets/a5f84c4e-9a44-48b3-bd2a-afa7b7c792e4)
+![image](https://github.com/user-attachments/assets/16f98874-361d-4eba-888c-2f72aebf0ff0)
+
 
 Body: (mismo formato que en la creación)
 
@@ -88,25 +94,31 @@ Body: (mismo formato que en la creación)
 Método: DELETE <br>
 URL: 
 ```
-http://localhost:8080/clientes/{id}
+http://localhost:8082/clientes/{id}
 ```
 Ejecutamos el metodo Delete.
-![image](https://github.com/user-attachments/assets/fcdc49db-7597-4c07-8053-cb8d65491e6c)
+![image](https://github.com/user-attachments/assets/66afe1fe-1533-4372-a918-cd0cc76424f2)
+
 Para despues verificar que este se haya eliminado enlistando a los clientes, deberia aparecer nada mas uno, porque el segundo ya fue eliminado.
-![image](https://github.com/user-attachments/assets/2c43dd2c-6cd3-4f67-991c-64098773c8e4)
+![image](https://github.com/user-attachments/assets/502974da-a57f-494b-8eb6-68de7a815a15)
 
 
 
 ## 📌 Cuenta
+
 ### Crear Cuenta (POST)
+
 Método: POST <br>
-Headers: Content-Type: application/json <br>
+Headers: Content-Type <br> application/json <br>
+
 URL: 
+
 ```
-http://localhost:8080/cuentas
+http://localhost:8082/cuentas
 ```
 
 Body:
+
 ```
 {
   "numeroCuenta": 478758,
@@ -117,7 +129,12 @@ Body:
 }
 ```
 
-![image](https://github.com/user-attachments/assets/1ca2da74-cb93-41ac-aaaf-d8406c45880e)
+![image](https://github.com/user-attachments/assets/ae8736a3-4585-4bb4-9404-e09ebcc65bf0)
+
+
+## Crear Cuenta a Usuario NO EXISTENTE
+
+![image](https://github.com/user-attachments/assets/9932e334-d5c3-42c1-b510-f436a6927f6a)
 
 
 
@@ -125,18 +142,19 @@ Body:
 Método: GET <br>
 URL: 
 ```
-http://localhost:8080/cuentas
+http://localhost:8082/cuentas
 ```
-![image](https://github.com/user-attachments/assets/5ba3691d-bcc7-451e-99e5-38a01d545667)
+
+![image](https://github.com/user-attachments/assets/d9b3cf95-5427-4c30-b63c-77dd74926ef9)
 
 
 ### Obtener Cuenta por Número (GET)
 Método: GET <br>
 URL: 
 ```
-http://localhost:8080/cuentas/{numeroCuenta}
+http://localhost:8082/cuentas/{numeroCuenta}
 ```
-![image](https://github.com/user-attachments/assets/1fec5c8e-15fa-48fe-ba48-4203a7b6897c)
+![image](https://github.com/user-attachments/assets/0ef7922a-e0f7-42ea-9a79-6479fcd49752)
 
 
 ### Actualizar Cuenta (PUT)
@@ -144,62 +162,67 @@ Método: PUT <br>
 Headers: Content-Type: application/json <br>
 URL: 
 ```
-http://localhost:8080/cuentas/{numeroCuenta}
+http://localhost:8082/cuentas/{numeroCuenta}
 ```
 
 Body: (mismo formato que en la creación)
-![image](https://github.com/user-attachments/assets/3d98b4fc-3848-435d-86cf-7b7d67cb6648)
+
+![image](https://github.com/user-attachments/assets/ad8448e8-641e-4e28-90ed-b7a60113ed37)
 
 
 ## Eliminar Cuenta (DELETE)
 Método: DELETE <br>
 URL: 
 ```
-http://localhost:8080/cuentas/{numeroCuenta}
+http://localhost:8082/cuentas/{numeroCuenta}
 ```
-![image](https://github.com/user-attachments/assets/164366c4-df36-46a8-8c06-02d019284cc1)
+
+![image](https://github.com/user-attachments/assets/a115bf78-a642-4c04-9a2d-577a1e804b94)
 
 
 
 ## F2 & F3: Gestión de Movimientos y Validación de Saldo
-###📝 Flujo de prueba completo
-<br>
 
 ## 1️⃣ Crear un depósito (valor positivo)
+
 Método: POST <br>
 Headers: Content-Type: application/json <br>
 URL: 
+
 ```
-http://localhost:8080/movimientos
+http://localhost:8082/movimientos
 ```
 
 Body:
 ```
-json{
+{
   "fecha": "2023-05-19",
   "tipoMovimiento": "Depósito",
   "valor": 500,
   "saldo": 0,
-  "numeroCuenta": 110101
+  "numeroCuenta": 478758
 }
 
 ```
 
-![image](https://github.com/user-attachments/assets/0a875b48-af2a-4daf-9627-d15c75c25c80)
-<br>
+![image](https://github.com/user-attachments/assets/0d68add1-4a74-4bfd-ad22-8f718695e13a)
 
 
 ## 2️⃣ Crear un retiro (valor negativo)
+
 Método: POST <br>
 Headers: Content-Type: application/json <br>
 URL: 
+
 ```
-http://localhost:8080/movimientos
+http://localhost:8082/movimientos
+
 ```
 
 Body:
+
 ```
-json{
+{
   "fecha": "2023-05-19",
   "tipoMovimiento": "Retiro",
   "valor": -300,
@@ -207,37 +230,34 @@ json{
   "numeroCuenta": 478758
 }
 ```
-### Resultado esperado:
 
-Estado: 201 Created
-El saldo de la cuenta se reduce a 2200
-Show Image
-
+![image](https://github.com/user-attachments/assets/a20ed80f-4a67-4f4d-98cd-ae0b4461cf5a)
 
 ## 3️⃣ Verificar saldo actualizado
-Método: GET
+
+Método: GET <br>
+
 URL: 
+
 ```
-http://localhost:8080/cuentas/478758
+http://localhost:8082/cuentas/478758
 ```
 
-
-### Resultado esperado:
-
-Estado: 200 OK
-Respuesta que incluye saldo inicial
-![image](https://github.com/user-attachments/assets/6563e548-69c4-4fbf-816b-b6e9cea22846)
+![image](https://github.com/user-attachments/assets/35629b23-94e9-4d57-b44e-1898e9b1b4d2)
 
 
 ## 4️⃣ Validar protección de saldo insuficiente (F3)
+
 Método: POST <br>
 Headers: Content-Type: application/json <br>
 URL: 
+
 ```
-http://localhost:8080/movimientos
+http://localhost:8082/movimientos
 ```
 
 Body:
+
 ```
 {
   "fecha": "2023-05-19",
@@ -253,14 +273,16 @@ Body:
 Estado: 400 Bad Request
 Mensaje de error: "Saldo no disponible"
 
-![image](https://github.com/user-attachments/assets/a18555b1-fced-4d78-aa88-f7f1e63e7ea9)
+![image](https://github.com/user-attachments/assets/47b4f8dd-0685-450a-bf0d-cc1f78853efd)
+
 
 
 ## 5️⃣ Consultar historial de movimientos
 Método: GET
 URL: 
+
 ```
-http://localhost:8080/movimientos/cuenta/478758
+http://localhost:8082/movimientos/cuenta/478758
 ```
 
 ### Resultado esperado:
@@ -268,7 +290,10 @@ http://localhost:8080/movimientos/cuenta/478758
 Estado: 200 OK <br>
 Lista de todos los movimientos realizados en la cuenta <br>
 
-![image](https://github.com/user-attachments/assets/d81f1def-5f5b-4a1f-aec7-3eac0bec2a11)
+![image](https://github.com/user-attachments/assets/fc92ac8b-388b-4e00-8f08-0f68d36150b4)
+<br>
+![image](https://github.com/user-attachments/assets/a0c73d2a-b636-47b5-a87e-16b331ff4716)
+
 
 
 ## 6️⃣ Modificar un movimiento existente
@@ -276,25 +301,24 @@ Primero, obtén el ID del movimiento:
 <br>
 Método: GET
 URL: 
-```
-http://localhost:8080/movimientos
-```
 
-
+```
+http://localhost:8082/movimientos
+```
 
 Luego actualiza: <br>
 Método: PUT <br>
 Headers: Content-Type: application/json <br>
 URL: 
+
 ```
-http://localhost:8080/movimientos/{id}
+http://localhost:8082/movimientos/{id}
 ```
 
 Body:
 
-
 ```
-json{
+{
   "fecha": "2023-05-19",
   "tipoMovimiento": "Depósito",
   "valor": 600,
@@ -302,20 +326,20 @@ json{
   "numeroCuenta": 478758
 }
 ```
+
 ### Resultado esperado:
 
 Estado: 200 OK
 El saldo de la cuenta se ajusta automáticamente
 
-![image](https://github.com/user-attachments/assets/0bfe9df2-7949-4ebb-a613-017feb406df5)
-
-
+![image](https://github.com/user-attachments/assets/26465ca0-d29c-4da4-aadc-60d1c10c03f3)
 
 ## 7️⃣ Eliminar un movimiento
+
 Método: DELETE
 URL: 
 ```
-http://localhost:8080/movimientos/{id}
+http://localhost:8082/movimientos/{id}
 ```
 
 
@@ -323,7 +347,9 @@ http://localhost:8080/movimientos/{id}
 
 Estado: 204 No Content <br>
 El saldo de la cuenta se revierte automáticamente <br>
-![image](https://github.com/user-attachments/assets/4b38acd7-5cfb-4d06-81b7-02dbb053fd51)
+
+![image](https://github.com/user-attachments/assets/54d2ca51-b619-48b2-ab6d-73203534dda8)
+
 
 
 ## 📊 Estado de Cuenta (F4)
@@ -333,12 +359,14 @@ Método: GET
 <br>
 URL: 
 ```
-http://localhost:8080/reportes?clienteId=jose.lema&fechaInicio=2023-05-01&fechaFin=2023-05-30
+http://localhost:8080/reportes
 ```
 
 
 El resultado esperado sería un JSON con la estructura de un estado de cuenta, pero posiblemente con datos limitados en esta fase.
+
 ## 🗂️ Estructura del Proyecto
+
 ```
 src/
 ├── main/
