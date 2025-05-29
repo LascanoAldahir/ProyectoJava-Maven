@@ -418,6 +418,14 @@ src/
                         └── ClienteServiceTest.java
 
 ```
+
+## 📝 Pruebas Unitarias
+
+Como se puede observar la funcionalidad de cada metodo en Cliente.Controller cumple su tarea exitosamente.
+
+![image](https://github.com/user-attachments/assets/e9650a13-0be0-4f9c-a82d-5edac6e34292)
+
+
 ## 📝 Notas Importantes
 
 Para que las pruebas funcionen correctamente, asegúrate de crear primero un cliente y una cuenta.
